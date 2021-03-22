@@ -1,4 +1,4 @@
-# [Set Tools for NoCS](https://letheward.github.io/seToolz)
+# [Set Tools for NoCS](https://letheward.github.io/seToolz/)
 
 ## How To Use
 
