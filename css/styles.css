@@ -1,0 +1,49 @@
+p {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 18px;
+    color: #ddd;
+    text-align: center;
+}
+
+code {
+    font-family: ubuntu mono, consolas, courier new, monospace;
+    padding: 3px;
+    background: #3b5163;
+    border-radius: 10px;
+}
+
+canvas {
+    background: #fff;
+    padding: 40px;
+    display: block;
+    margin: 0 auto;
+}
+
+input {
+    text-align: center;
+    background: #1d2831;
+    font-size: 22px;
+    font-family: ubuntu mono, consolas, courier new, monospace;
+    color: #fff;
+    display: block;
+    padding: 10px;
+    border: 2px solid #1ab188;
+    margin: 0 auto;
+    transition: all .2s;
+    width: 50%;
+}
+
+input:focus {
+    border: 2px solid #1bc497;
+    background: #182229;
+    box-shadow: 0 4px 10px 4px #222;
+}
+
+div {
+    background: #24313c;
+    padding: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow:0 4px 10px 4px #e0dcd9;
+}
