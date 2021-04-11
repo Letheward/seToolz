@@ -1,36 +1,39 @@
-p {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 18px;
-    color: #ddd;
-    text-align: center;
-}
-
-code {
-    font-family: ubuntu mono, consolas, courier new, monospace;
-    padding: 3px;
-    background: #3b5163;
-    border-radius: 10px;
-}
-
-canvas {
+svg {
     background: #fff;
     padding: 40px;
-    display: block;
+    /* display: block; */
     margin: 0 auto;
 }
 
+svg.clockDiagram g text {
+    font-family: sans-serif;
+    font-size: 22px;
+}
+
+svg.clockDiagram #noteRings circle {
+    fill: rgba(0,0,0,0);
+    stroke-width: 6;
+    stroke: #24313c;
+    transition: all .1s;
+}
+
+svg.clockDiagram #noteRings circle:hover {
+    stroke: #1ab188;
+    stroke-width: 5;
+}
+
 input {
+    margin: auto;
     text-align: center;
+    outline: none;
     background: #1d2831;
     font-size: 22px;
     font-family: ubuntu mono, consolas, courier new, monospace;
     color: #fff;
-    display: block;
     padding: 10px;
     border: 2px solid #1ab188;
-    margin: 0 auto;
     transition: all .2s;
-    width: 50%;
+    min-width: 300px;
 }
 
 input:focus {
@@ -39,11 +42,30 @@ input:focus {
     box-shadow: 0 4px 10px 4px #222;
 }
 
-div {
+input:hover {
+    border: 2px solid #1bc497;
+    background: #182229;
+    box-shadow: 0 4px 10px 4px #222;
+}
+
+body {
+    text-align: center;
+}
+
+div#display {
+    margin: auto;
+}
+
+footer {
+    margin: auto;
+    border-radius: 10px;
+    text-align: center;
+    width: 600px;
     background: #24313c;
     padding: 20px;
-    max-width: 600px;
-    margin: 0 auto;
-    border-radius: 10px;
-    box-shadow:0 4px 10px 4px #e0dcd9;
+}
+
+button {
+    width: 55px;
+    height: 55px;
 }

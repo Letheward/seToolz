@@ -1,113 +1,125 @@
 // === Initialize ===
 
-let canvas = document.querySelector("canvas");
-let ctx = canvas.getContext('2d');
 let input = document.querySelector("input");
 let notes = [];
+let graphIndex = 0;
 
-// === Canvas Drawing ===
+// === Drawing ===
 
-function drawRings() {
+function drawClockDiagram() {
 
-    // Initialize
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.translate(300, 300);
+    // init svg
+    let svg = document.getElementById("display").appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "svg")
+    );
+    svg.setAttribute("id", graphIndex);
+    svg.setAttribute("class", "clockDiagram");
+    svg.setAttribute("width", 600);
+    svg.setAttribute("height", 600);
+    graphIndex++;
     
-    // Main ring
-    ctx.beginPath();
-    ctx.lineWidth = 6;
-    ctx.strokeStyle = "#24313c";
-    ctx.arc(0, 0, 200, 0, Math.PI * 2);
-    ctx.stroke();
+    // main ring
+    let mainRing = svg.appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "circle")
+    );
+    mainRing.setAttribute("id", "mainRing");
+    mainRing.setAttribute("fill", "#fff");
+    mainRing.setAttribute("stroke-width", 6);
+    mainRing.setAttribute("stroke", "#24313c");
+    mainRing.setAttribute("cx", 300);
+    mainRing.setAttribute("cy", 300);
+    mainRing.setAttribute("r", 200);
     
-    // Note rings
+    // paddings
+    let paddings = svg.appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "g")
+    );
+    paddings.setAttribute("id", "paddings");
     for (i = 0; i < 12; i++) {
-        ctx.fillStyle = "#fff";
-        ctx.beginPath();
-        ctx.arc(200, 0, 25, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.stroke();
-        ctx.closePath();
-        ctx.rotate(Math.PI / 6);
+        let padding = paddings.appendChild(
+            document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        );
+        padding.setAttribute("id", i);
+        padding.setAttribute("fill", "#fff");
+        padding.setAttribute("cx", 300);
+        padding.setAttribute("cy", 300);
+        padding.setAttribute("r", 25);
+        padding.setAttribute("transform", ("rotate(" + 30 * i + ",300, 300) translate(0, -200)"));
     }
 
-    // Return to original position
-    ctx.translate(- 300, - 300);
-}
-
-// Draw text on circle
-function circularDrawText(i, xOffset, yOffset) {
-    ctx.fillText(
-        i,
-        Math.sin(Math.PI * (i / 6)) * 200 + xOffset,
-        - Math.cos(Math.PI * (i / 6)) * 200 + yOffset
+    // draw notes
+    let notes = svg.appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "g")
     );
-}
-
-// Draw indexes on circle
-function circularDrawIndex(i, j, xOffset, yOffset) {
-    ctx.fillText(
-        j,
-        Math.sin(Math.PI * (i / 6)) * 150 + xOffset,
-        - Math.cos(Math.PI * (i / 6)) * 150 + yOffset
-    );
-}
-
-// weird drawing bugs fixed but don't know why
-function drawNotes(notes) {
-    ctx.translate(300, 300);
-    ctx.font = "22px sans-serif";
+    notes.setAttribute("id", "notes");
     for (i = 0; i < 12; i++) {
-        ctx.fillStyle = "#24313c";
+        let note = notes.appendChild(
+            document.createElementNS("http://www.w3.org/2000/svg", "text")
+        )
+        note.textContent = i;
+        note.setAttribute("id", i);
+        note.setAttribute("fill", "#24313c")
         if (i < 10) {
-            circularDrawText(i, - 7, 8);
+            note.setAttribute("x", 300 + Math.sin(Math.PI * (i / 6)) * 200 - 7);
+            note.setAttribute("y", 300 - Math.cos(Math.PI * (i / 6)) * 200 + 8);      
         } else {
-            circularDrawText(i, - 13, 8);
+            note.setAttribute("x", 300 + Math.sin(Math.PI * (i / 6)) * 200 - 13);
+            note.setAttribute("y", 300 - Math.cos(Math.PI * (i / 6)) * 200 + 8);
         }
-        for (j = 0; j < notes.length; j++) {
-            if (notes[j] === i) {
-                ctx.fillStyle = "#1ab188";
-                ctx.beginPath();
-
-                // I don't know why it's larger than in drawRings()
-                // so use 24 instead
-                ctx.arc(
-                    Math.sin(Math.PI * (i / 6)) * 200,
-                    - Math.cos(Math.PI * (i / 6)) * 200,
-                    24, 0, Math.PI * 2
-                );
-                ctx.closePath();
-                ctx.fill();
-                if (i < 10) {
-                    ctx.fillStyle = "#fff";
-                    circularDrawText(i, - 7, 8);
-                    // console.log(j);
-                    ctx.fillStyle = "#24313c";
-                    circularDrawIndex(i, j, - 7, 8);
-                } else {
-                    ctx.fillStyle = "#fff";
-                    circularDrawText(i, - 13, 8);
-                    // console.log(j);
-                    ctx.fillStyle = "#24313c";
-                    circularDrawIndex(i, j, - 13, 8);
-                }
-                break;
-            }
-        }   
     }
-    ctx.translate(- 300, - 300);
-}
     
-function draw() {
-    drawRings();  
-    drawNotes(notes);
+    // note rings
+    let noteRings = svg.appendChild(
+        document.createElementNS("http://www.w3.org/2000/svg", "g")
+    );
+    noteRings.setAttribute("id", "noteRings");
+    for (i = 0; i < 12; i++) {
+        let noteRing = noteRings.appendChild(
+            document.createElementNS("http://www.w3.org/2000/svg", "circle")
+        );
+        noteRing.setAttribute("id", i);
+        noteRing.setAttribute("cx", 300);
+        noteRing.setAttribute("cy", 300);
+        noteRing.setAttribute("r", 25);
+        noteRing.setAttribute("transform", ("rotate(" + 30 * i + ",300, 300) translate(0, -200)"));
+    }
 }
+
+function updateClockDiagram() {
+    let svg = document.getElementById(0);
+    let paddings = svg.getElementById("paddings").querySelectorAll("circle");
+    let noteValues = svg.getElementById("notes").querySelectorAll("text");
+    for (i = 0; i < 12; i++) {
+        paddings[i].setAttribute("fill",  "#fff");
+        noteValues[i].setAttribute("fill", "#24313c");
+    }
+    for (i = 0; i < notes.length; i++) {
+        paddings[notes[i]].setAttribute("fill",  "#1ab188");
+        noteValues[notes[i]].setAttribute("fill", "#fff");
+    }
+}
+
+function drawTonnetz() {
+
+    // draw sets
+    // for (i = 0; i < 12; i++) {
+    
+    // }
+}
+
+function drawAnalytics() {
+
+    // draw sets
+}
+
 
 // === Input ===
 
 function parseInput() {
     
-    // Initialize
+    // mouse click handling
+   
+    // Parse
     let splitValues = input.value.split(/\s+/);
     notes = [];
 
@@ -134,8 +146,14 @@ input.oninput = handleInput;
 
 function handleInput() {
     parseInput();
-    draw();
+    // updateClockDiagram();
+    updateClockDiagram();
 }
+
+// interface to functions
+
+
+
 
 // === Audio ===
 
@@ -193,7 +211,7 @@ function mirrorSet() {
     for (i = 0; i < notes.length; i++) {
         notes[i] = (12 - notes[i]) % 12;
     }
-    draw();
+    updateClockDiagram();
     writeInput();
 }
 
@@ -201,7 +219,7 @@ function mirrorSet() {
 function sortSet() {
     // need to understand this
     notes.sort((a, b) => a - b);
-    draw();
+    updateClockDiagram();
     writeInput();
 }
 
@@ -216,7 +234,7 @@ function transposeSet(x) {
         }
     }
 
-    draw();
+    updateClockDiagram();
     writeInput();
 }
 
@@ -239,7 +257,7 @@ function shiftIndex(x) {
         }
     }
 
-    draw();
+    updateClockDiagram();
     writeInput();
 }
 
@@ -257,7 +275,7 @@ function jumpIndex(x) {
         }
     }
 
-    draw();
+    updateClockDiagram();
     writeInput();
 }
 
@@ -269,6 +287,5 @@ function toIndex(x) {
 
 // === Main ===
 
+drawClockDiagram();
 handleInput();
-// writeInput();
-// draw();
