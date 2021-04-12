@@ -23,7 +23,7 @@ svg.clockDiagram #noteRings circle:hover {
 }
 
 input {
-    margin: auto;
+    margin-bottom: 20px;
     text-align: center;
     outline: none;
     background: #1d2831;
@@ -33,7 +33,18 @@ input {
     padding: 10px;
     border: 2px solid #1ab188;
     transition: all .2s;
+}
+
+input#setInput {
     min-width: 300px;
+}
+
+input#speed {
+    width: 70px;
+}
+
+input#toIndex {
+    width: 70px;
 }
 
 input:focus {
@@ -56,7 +67,7 @@ div#display {
     margin: auto;
 }
 
-footer {
+div.inputs {
     margin: auto;
     border-radius: 10px;
     text-align: center;
@@ -66,6 +77,37 @@ footer {
 }
 
 button {
-    width: 55px;
-    height: 55px;
+    outline: none;
+    min-height: 50px;
+    border: 5px solid #1bc497;
+    border-radius: 10px;
+    background: #1bc497;
+    margin-right: 5px;
+    margin-bottom: 20px;
+    font-family: sans-serif;
+    font-size: 18px;
+    color: #fff;
+    transition: all .1s;
+}
+
+button:hover {
+    box-shadow: 0 4px 10px 4px #222;
+}
+
+button:active {
+    border: 5px solid #fff;
+}
+
+button#sort,
+button#mirror,
+button#transposeUp,
+button#transposeDown,
+button#indexUp,
+button#indexDown,
+button#toRoot {
+    min-width: 240px;
+}
+
+button#setRootTo {
+    min-width: 140px;
 }

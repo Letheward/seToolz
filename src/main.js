@@ -1,6 +1,6 @@
 // === Initialize ===
 
-let input = document.querySelector("input");
+let input = document.getElementById("setInput");
 let notes = [];
 let graphIndex = 0;
 
@@ -86,7 +86,7 @@ function drawClockDiagram() {
 }
 
 function updateClockDiagram() {
-    let svg = document.getElementById(0);
+    let svg = document.getElementById(0); // temp get id
     let paddings = svg.getElementById("paddings").querySelectorAll("circle");
     let noteValues = svg.getElementById("notes").querySelectorAll("text");
     for (i = 0; i < 12; i++) {
@@ -113,48 +113,6 @@ function drawAnalytics() {
 }
 
 
-// === Input ===
-
-function parseInput() {
-    
-    // mouse click handling
-   
-    // Parse
-    let splitValues = input.value.split(/\s+/);
-    notes = [];
-
-    // Write values to notes array
-    for (i = 0; i < splitValues.length; i++) {
-        
-        // Only write when valid
-        if (!(
-            parseInt(splitValues[i], 10) > 11
-            ||
-            isNaN(parseInt(splitValues[i]))
-        )) {
-            notes.push(parseInt(splitValues[i], 10));
-        }
-    }
-
-    // need to understand this
-    // Get rid of repeated values
-    notes = Array.from(new Set(notes));
-}
-
-// need to understand this
-input.oninput = handleInput;
-
-function handleInput() {
-    parseInput();
-    // updateClockDiagram();
-    updateClockDiagram();
-}
-
-// interface to functions
-
-
-
-
 // === Audio ===
 
 // create web audio api context
@@ -178,105 +136,68 @@ function playNote(p, t0, t1) {
 
 function play(speed) {
     let octave = 0;
-    if (speed) {
-        for (i = 0; i < notes.length; i++) { 
-            if (!(notes[i] > notes[i - 1] || i === 0)) {
-                octave += 1;
-            }
-            playNote(notes[i] + octave * 12, i / speed, (i + 1) / speed);
+    if (!speed) {
+        speed = 1;
+    }
+    for (i = 0; i < notes.length; i++) { 
+        if (!(notes[i] > notes[i - 1] || i === 0)) {
+            octave += 1;
         }
-    } else {
-        for (i = 0; i < notes.length; i++) { 
-            if (!(notes[i] > notes[i - 1] || i === 0)) {
-                octave += 1;
-            }
-            playNote(notes[i] + octave * 12, i, i + 1);
-        }
+        playNote(notes[i] + octave * 12, i / speed, (i + 1) / speed);
     }
 }
 
 // === Functions ===
 
-// Write notes to input with whitespace
-function writeInput() {
-    input.value = "";
-    for (i = 0; i < notes.length - 1; i++) {
-        input.value += notes[i] + " ";
-    }
-    input.value += notes[notes.length - 1];
-}
 
 // Return the negative set of notes, reserve original order
 function mirrorSet() {
     for (i = 0; i < notes.length; i++) {
         notes[i] = (12 - notes[i]) % 12;
     }
-    updateClockDiagram();
-    writeInput();
 }
 
 // Sort notes in ascending order
 function sortSet() {
-    // need to understand this
-    notes.sort((a, b) => a - b);
-    updateClockDiagram();
-    writeInput();
+    notes.sort((a, b) => a - b); // need to understand this
 }
 
 // Transpose by given amount
 function transposeSet(x) {
-
-    // int check for safety
-    if (Number.isInteger(x)) {
-
+    if (Number.isInteger(x)) { // int check for safety
         for (i = 0; i < notes.length; i++) {
             notes[i] = ((notes[i] + x) % 12 + 12) % 12;
         }
     }
-
-    updateClockDiagram();
-    writeInput();
-}
-
-// Use first note in set as root
-function toRoot() {
-    transposeSet(- notes[0]);
 }
 
 // Shift index of all by to given amount
 function shiftIndex(x) {
 
-    // ES6 is weird...
-    let [... buffer] = notes;
+    let [... buffer] = notes; // ES6 is weird...
 
-    // int check for safety
-    if (Number.isInteger(x)) {
-
+    if (Number.isInteger(x)) { // int check for safety
         for (i = 0; i < buffer.length; i++) {
             notes[i] = buffer[(((i + x) % buffer.length) + buffer.length) % buffer.length];
         }
     }
-
-    updateClockDiagram();
-    writeInput();
 }
 
 // Index transform using jump interval (not in musical meaning) x
 function jumpIndex(x) {
 
-    // ES6 is weird...
-    let [... buffer] = notes;
+    let [... buffer] = notes; // ES6 is weird...
 
-    // int check for safety
-    if (Number.isInteger(x) && x !== 0) {
-
+    if (Number.isInteger(x) && x !== 0) { // int check for safety
         for (i = 0; i < buffer.length; i++) {
             notes[i] = buffer[(((i * x) % buffer.length) + buffer.length) % buffer.length];
         }
     }
+}
 
-    updateClockDiagram();
-    writeInput();
+// Use first note in set as root
+function toRoot() {
+    transposeSet(- notes[0]);
 }
 
 // Use index x as root
@@ -285,7 +206,135 @@ function toIndex(x) {
     toRoot();
 }
 
+// === Input ===
+
+function parseInput() {
+    
+    // Parse
+    let splitValues = input.value.split(/\s+/);
+    notes = [];
+
+    // Write values to notes array
+    for (i = 0; i < splitValues.length; i++) {
+        
+        // Only write when valid
+        if (!(
+            parseInt(splitValues[i], 10) > 11
+            ||
+            isNaN(parseInt(splitValues[i]))
+        )) {
+            notes.push(parseInt(splitValues[i], 10));
+        }
+    }
+
+    // need to understand this
+    // Get rid of repeated values
+    notes = Array.from(new Set(notes));
+}
+
+// Write notes to input with whitespace
+function writeInput() {
+    input.value = "";
+    if (notes[0] != undefined) {
+        for (i = 0; i < notes.length - 1; i++) {
+            input.value += notes[i] + " ";
+        }
+        input.value += notes[notes.length - 1];
+    }
+}
+
+// input handling
+input.oninput = () => {
+    parseInput();
+    updateClockDiagram();
+}
+
+// mouse handling
+function mouseInput(i) {
+    if (notes.includes(i)) {
+        notes.splice(notes.indexOf(i), 1);
+    } else {
+        notes.push(i);
+    }
+    update();
+}
+
+// after any function, use this
+function update() {
+    updateClockDiagram();
+    writeInput();
+}
+
+// interface to functions
+document.getElementById("play").onclick = () => {
+    actx.resume();
+    play(parseFloat(document.getElementById("speed").value));
+}
+
+document.getElementById("sort").onclick = () => {
+    sortSet();
+    update();
+}
+
+document.getElementById("mirror").onclick = () => {
+    mirrorSet();
+    update();
+}
+
+document.getElementById("transposeUp").onclick = () => {
+    transposeSet(1);
+    update();
+}
+
+document.getElementById("transposeDown").onclick = () => {
+    transposeSet(-1);
+    update();
+}
+
+document.getElementById("indexUp").onclick = () => {
+    shiftIndex(1);
+    update();
+}
+
+document.getElementById("indexDown").onclick = () => {
+    shiftIndex(-1);
+    update();
+}
+
+document.getElementById("toRoot").onclick = () => {
+    toRoot();
+    update();
+}
+
+document.getElementById("setRootTo").onclick = () => {
+    toIndex(parseInt(document.getElementById("toIndex").value));
+    update();
+}
+
+document.getElementById("jumpBy").onclick = () => {
+    jumpIndex(parseInt(document.getElementById("jumpInterval").value));
+    update();
+}
+
 // === Main ===
 
 drawClockDiagram();
-handleInput();
+parseInput();
+updateClockDiagram();
+
+let svg = document.getElementById("display").querySelector("svg");
+let noteRings = svg.getElementById("noteRings").querySelectorAll("circle");
+
+// brute force for now, should find a better way
+noteRings[0 ].onclick = () => {mouseInput(0 )}
+noteRings[1 ].onclick = () => {mouseInput(1 )}
+noteRings[2 ].onclick = () => {mouseInput(2 )}
+noteRings[3 ].onclick = () => {mouseInput(3 )}
+noteRings[4 ].onclick = () => {mouseInput(4 )}
+noteRings[5 ].onclick = () => {mouseInput(5 )}
+noteRings[6 ].onclick = () => {mouseInput(6 )}
+noteRings[7 ].onclick = () => {mouseInput(7 )}
+noteRings[8 ].onclick = () => {mouseInput(8 )}
+noteRings[9 ].onclick = () => {mouseInput(9 )}
+noteRings[10].onclick = () => {mouseInput(10)}
+noteRings[11].onclick = () => {mouseInput(11)}
