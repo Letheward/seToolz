@@ -122,7 +122,7 @@ let actx = new AudioContext;
 let osc = actx.createOscillator();
 let gainNode = actx.createGain();
 
-// osc.type = "triangle";
+osc.type = "triangle";
 osc.connect(gainNode);
 gainNode.connect(actx.destination);
 gainNode.gain.setValueAtTime(0, actx.currentTime);
@@ -130,14 +130,14 @@ osc.start();
 
 function playNote(p, t0, t1) {
     osc.detune.setValueAtTime((p - 9) * 100, actx.currentTime + t0);
-    gainNode.gain.setValueAtTime(0.5, actx.currentTime + t0);
+    gainNode.gain.setValueAtTime(0.2, actx.currentTime + t0);
     gainNode.gain.setValueAtTime(0, actx.currentTime + t1);
 }
 
 function play(speed) {
     let octave = 0;
     if (!speed) {
-        speed = 1;
+        speed = 4;
     }
     for (i = 0; i < notes.length; i++) { 
         if (!(notes[i] > notes[i - 1] || i === 0)) {

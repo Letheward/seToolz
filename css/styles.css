@@ -23,15 +23,16 @@ svg.clockDiagram #noteRings circle:hover {
 }
 
 input {
+    min-height: 30px;
     margin-bottom: 20px;
     text-align: center;
     outline: none;
     background: #1d2831;
     font-size: 22px;
-    font-family: ubuntu mono, consolas, courier new, monospace;
+    font-family: monospace;
     color: #fff;
     padding: 10px;
-    border: 2px solid #1ab188;
+    border: none;
     transition: all .2s;
 }
 
@@ -47,16 +48,16 @@ input#toIndex {
     width: 70px;
 }
 
+input#jumpInterval {
+    width: 220px;
+}
+
 input:focus {
-    border: 2px solid #1bc497;
     background: #182229;
-    box-shadow: 0 4px 10px 4px #222;
 }
 
 input:hover {
-    border: 2px solid #1bc497;
     background: #182229;
-    box-shadow: 0 4px 10px 4px #222;
 }
 
 body {
@@ -69,7 +70,6 @@ div#display {
 
 div.inputs {
     margin: auto;
-    border-radius: 10px;
     text-align: center;
     width: 600px;
     background: #24313c;
@@ -79,8 +79,7 @@ div.inputs {
 button {
     outline: none;
     min-height: 50px;
-    border: 5px solid #1bc497;
-    border-radius: 10px;
+    border: none;
     background: #1bc497;
     margin-right: 5px;
     margin-bottom: 20px;
@@ -91,11 +90,11 @@ button {
 }
 
 button:hover {
-    box-shadow: 0 4px 10px 4px #222;
+    background: #48c9a6;
 }
 
 button:active {
-    border: 5px solid #fff;
+    background: #94c5b8;
 }
 
 button#sort,
@@ -109,5 +108,13 @@ button#toRoot {
 }
 
 button#setRootTo {
-    min-width: 140px;
+    min-width: 145px;
+}
+
+button#play {
+    min-width: 70px;
+}
+
+button#jumpBy {
+    min-width: 240px;
 }
